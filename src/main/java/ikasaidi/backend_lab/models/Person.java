@@ -1,16 +1,23 @@
 package ikasaidi.backend_lab.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
-@Entity
 public class Person {
 
-    @Id
+
     private int id;
     private String name;
     private int age;
     private String gender;
+
+
+    public Person() {
+    }
+
+    public Person(int id, String name, String gender) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+    }
 
     public int getId() {
         return id;
