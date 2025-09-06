@@ -8,58 +8,81 @@ app.use(express.json());
 
 const PORT = 8000;
 
-/* POST /persons ; PUT /persons/{id} ; DELETE /persons/{id} */
+
+app.get('/persons', (req, res) => {
+    db.query('SELECT * FROM persons', (err, rows) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Erreur dans la requête de la database' });
+        }
+        res.json(rows);
+    });
+});
 
 app.post('/persons', (req, res) => {
-    const {name, age, gender} = req.body;
-    const query = 'INSERT INTO persons (name, age, gender) VALUES (?, ?, ?)';
+    const { first_name, last_name, email, gender } = req.body;
 
-    db.query(query, [name, age, gender], (err, result) => {
-        if (err) {
-            console.error('Error inserting person:', err);
-            res.status(500).json({error: 'Database error'});
-            return;
+    db.query(
+        'INSERT INTO persons (first_name, last_name, email, gender) VALUES (?, ?, ?, ?)',
+        [first_name, last_name, email, gender],
+        (err, result) => {
+            if (err) {
+                console.error(err); 
+                return res.status(500).json({ error: "Erreur lors de la création de la nouvelle personne" });
+            }
+
+            res.json({
+                message: 'Nouvelle personne ajoutée avec succès',
+                id: result.insertId 
+            });
         }
-        res.status(201).json({id: result.insertId, name, age, gender});
-    });
-})
+    );
+});
+
 
 app.put('/persons/:id', (req, res) => {
-    const {id} = req.params;
-    const {name, age, gender} = req.body;
+    const { id } = req.params;
+    const { first_name, last_name, email, gender } = req.body;
 
-    const query = 'UPDATE persons SET name = ?, age = ?, gender = ? WHERE id = ?';
-    db.query(query, [name, age, gender, id], (err, result) => {
-        if (err) {
-            console.error('Error updating person:', err); 
-            res.status(500).json({error: 'Database error'});
-            return;
+    db.query(
+        'UPDATE persons SET first_name = ?, last_name = ?, email = ?, gender = ? WHERE id = ?',
+        [first_name, last_name, email, gender, id],
+        (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: "Erreur lors de la modification de la personne" });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: "Personne non trouvée" });
+            }
+
+            res.json({
+                message: 'La personne a bien été modifiée',
+                id: id
+            });
         }
+    );
+});
+
+
+app.delete('/persons', (req, res) => {
+    const { first_name, last_name } = req.body;
+
+    db.query('DELETE FROM persons WHERE first_name = ? AND last_name = ?', [first_name, last_name], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Erreur lors de la suppression" });
+        }
+
         if (result.affectedRows === 0) {
-            res.status(404).json({error: 'Person not found'});
-            return;
-        }   
-        res.status(200).json({id, name, age, gender});
+            return res.status(404).json({ error: "Personne non trouvée" });
+        }
+
+        res.json({ message: "Personne supprimée avec succès" });
     });
 });
 
-app.delete('/persons/:id', (req, res) => {
-    const {id} = req.params;
-    const query = 'DELETE FROM persons WHERE id = ?';
-
-    db.query(query, [id], (err, result) => {
-        if (err) {
-            console.error('Error deleting person:', err);
-            res.status(500).json({error: 'Database error'});
-            return;
-        }
-        if (result.affectedRows === 0) {
-            res.status(404).json({error: 'Person not found'});
-            return;
-        }
-        res.status(204).send();
-    });
-});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
