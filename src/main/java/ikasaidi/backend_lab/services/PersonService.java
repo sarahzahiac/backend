@@ -36,13 +36,22 @@ public class PersonService {
 
                     memoirePerson.add(new Person(id, name, gender));
                 }
-
-
             }
         }  catch (IOException e) {
             logger.info(e.getMessage());
         }
-
         return memoirePerson;
+    }
+
+    public List<Person> searchByName(String name) {
+        List<Person> allPerson = listPersons();
+        List<Person> filtered = new ArrayList<>();
+
+        for (Person person : allPerson) {
+            if (person.getName().toLowerCase().contains(name.toLowerCase())) {
+                filtered.add(person);
+            }
+        }
+        return filtered;
     }
 }
