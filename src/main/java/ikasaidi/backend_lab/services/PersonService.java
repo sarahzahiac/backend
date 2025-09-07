@@ -32,9 +32,10 @@ public class PersonService {
 
                     int id = Integer.parseInt(peopleData[0].trim());
                     String name = (peopleData[1].trim()+ " " + peopleData[2].trim()).trim();
+                    String email = peopleData[3].trim();
                     String gender = peopleData[4].trim();
 
-                    memoirePerson.add(new Person(id, name, gender));
+                    memoirePerson.add(new Person(id, name, gender, email));
                 }
 
 
