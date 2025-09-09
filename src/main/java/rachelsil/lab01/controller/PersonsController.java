@@ -6,6 +6,7 @@ import rachelsil.lab01.model.Person;
 import rachelsil.lab01.repository.PersonsRepository;
 import rachelsil.lab01.service.PersonService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,40 +38,19 @@ public class PersonsController {
     }
 
     @PostMapping
-    public String createNewPerson(@RequestBody Person newPerson){
-        personsRepository.save(newPerson);
-        return "Personne ajoutée avec succès";
+    public Person createPerson(@RequestBody Person newPerson){
+        return personService.addPerson(newPerson);
     }
 
     @PutMapping("/{id}")
-    public String updatePersonsById(@PathVariable int id, @RequestBody Person updatedPerson){
-        Person person = personsRepository.findById(id);
-
-        if(person == null){
-            return "Personne avec id" + id + " non trouvée";
-        }
-
-        person.setName(updatedPerson.getName());
-        person.setEmail(updatedPerson.getEmail());
-        person.setGender(updatedPerson.getGender());
-
-        personsRepository.save(person);
-
-        return "Personne modifiée avec succès";
+    public Person updatePerson(@PathVariable int id, @RequestBody Person updatedPerson){
+        return personService.updatePerson(id, updatedPerson);
     }
 
     @DeleteMapping("/{id}")
-    public String deletePersonsById(@PathVariable int id){
-        Person persons = personsRepository.findById(id);
-
-        if(persons == null){
-            return "Personne avec id" + id + " non trouvée";
-        }
-
-
-        personsRepository.delete(persons);
-
-        return "Personne supprimée avec succès";
+    public String deletePerson(@PathVariable int id){
+        boolean removed = personService.deletePerson(id);
+        return removed ? "Personne supprimée avec succès" : "Personne non trouvée";
     }
 
 }
