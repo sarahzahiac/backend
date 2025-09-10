@@ -23,5 +23,10 @@ public class PersonController {
         return personService.listPersons();
     }
 
+    @GetMapping("/search")
+    public List<Person> searchPerson(@RequestParam String name) {
+        return personService.searchByName(name);
+    }
+
 }
 
