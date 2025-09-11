@@ -4,9 +4,7 @@ import ikasaidi.backend_lab.models.Person;
 import ikasaidi.backend_lab.repositories.PersonRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -47,6 +45,40 @@ public class PersonService {
         }  catch (IOException e) {
             logger.info(e.getMessage());
         }
+        return memoirePerson;
+    }
+
+    // Liste csv
+    public List<Person> readListPersons() {
+        List<Person> memoirePerson = new ArrayList<>();
+
+        try (InputStream is = getClass().getResourceAsStream("/data/people.csv")) {
+
+            if (is == null) {
+                throw new RuntimeException("Fichier CSV introuvable !");
+            }
+
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                br.readLine();
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] peopleData = line.split(COMMA_DELIMITER);
+                    if (peopleData.length >= 5) {
+                        int id = Integer.parseInt(peopleData[0].trim());
+                        String name = (peopleData[1].trim() + " " + peopleData[2].trim()).trim();
+                        String email = peopleData[3].trim();
+                        String gender = peopleData[4].trim();
+
+                        memoirePerson.add(new Person(id, name, email, gender));
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            logger.info("Erreur lecture CSV : " + e.getMessage());
+        }
+
         return memoirePerson;
     }
 
