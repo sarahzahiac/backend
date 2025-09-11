@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/persons")
+@CrossOrigin()
 public class PersonController {
     @Autowired
     PersonRepository personRepository;
@@ -20,11 +21,13 @@ public class PersonController {
     }
 
     @GetMapping("/getAllPerson")
+    @ResponseBody
     public List<Person> getAllPerson() {
         return personService.listPersons();
     }
 
     @GetMapping("/search")
+    @ResponseBody
     public List<Person> searchPerson(@RequestParam String name) {
         return personService.searchByName(name);
     }
