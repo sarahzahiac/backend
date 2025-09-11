@@ -1,6 +1,7 @@
 package ikasaidi.backend_lab.services;
 
 import ikasaidi.backend_lab.models.Person;
+import ikasaidi.backend_lab.repositories.PersonRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -12,6 +13,11 @@ import java.util.logging.Logger;
 
 @Service
 public class PersonService {
+
+    private final PersonRepository personRepository;
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     private static final Logger logger = Logger.getLogger(PersonService.class.getName());
     public static final String COMMA_DELIMITER = ",";
@@ -37,16 +43,14 @@ public class PersonService {
 
                     memoirePerson.add(new Person(id, name, gender, email));
                 }
-
-
             }
         }  catch (IOException e) {
             logger.info(e.getMessage());
         }
-
         return memoirePerson;
     }
 
+    //Rechercher avec nom
     public List<Person> searchByName(String name) {
         List<Person> allPerson = listPersons();
         List<Person> filtered = new ArrayList<>();
@@ -57,5 +61,32 @@ public class PersonService {
             }
         }
         return filtered;
+    }
+
+    //Ajouter une personne
+    public Person addPerson(Person newPerson){
+        return personRepository.save(newPerson);
+    }
+
+    //Modifier une personne
+    public Person updatePerson(int id, Person newData) {
+        return personRepository.findById(id)
+                .map(p -> {
+                    p.setName(newData.getName());
+                    p.setEmail(newData.getEmail());
+                    p.setGender(newData.getGender());
+                    return personRepository.save(p);
+                })
+                .orElse(null);
+    }
+
+    //Supprimer une personne
+    public boolean deletePerson(int id){
+        if (personRepository.existsById((id))) {
+
+            personRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

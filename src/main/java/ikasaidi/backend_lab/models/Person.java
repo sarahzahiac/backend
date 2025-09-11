@@ -1,18 +1,23 @@
 package ikasaidi.backend_lab.models;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import org.springframework.data.annotation.Id;
+
+@Entity
 public class Person {
 
+    @jakarta.persistence.Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    private int id;
     private String name;
     private int age;
     private String email;
     private String gender;
 
-
-    public Person() {
-    }
 
     public Person(int id, String name, String gender, String email) {
         this.id = id;
@@ -21,10 +26,13 @@ public class Person {
         this.email = email;
     }
 
-    public int getId() {
-        return id;
+    public Person() {
     }
 
+
+    public Integer getId() {
+        return id;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -32,7 +40,6 @@ public class Person {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -40,7 +47,6 @@ public class Person {
     public int getAge() {
         return age;
     }
-
     public void setAge(int age) {
         this.age = age;
     }
@@ -48,7 +54,6 @@ public class Person {
     public String getGender() {
         return gender;
     }
-
     public void setGender(String gender) {
         this.gender = gender;
     }
