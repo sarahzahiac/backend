@@ -5,10 +5,15 @@ import ikasaidi.backend_lab.models.Series;
 import ikasaidi.backend_lab.repositories.PersonRepository;
 import ikasaidi.backend_lab.repositories.SeriesRepository;
 import ikasaidi.backend_lab.services.PersonService;
+import ikasaidi.backend_lab.services.RecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/persons")
@@ -21,8 +26,12 @@ public class PersonController {
     SeriesRepository seriesRepository;
     private final PersonService personService;
 
-    public PersonController(PersonService personService) {
+    private final RecommendationService recommendationService;
+
+    public PersonController(PersonService personService, RecommendationService recommendationService) {
+
         this.personService = personService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping("/getAllPerson")
@@ -78,6 +87,12 @@ public class PersonController {
         person.getHistory().add(series);
         return personRepository.save(person);
     }
+
+    @GetMapping("/{id}/recommendation")
+    public List<Series> getRecommendation(@PathVariable int id){
+        return recommendationService.getPersonsRecommendation(id);
+    }
+
 
 }
 
