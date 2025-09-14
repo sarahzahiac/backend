@@ -4,7 +4,11 @@ package ikasaidi.backend_lab.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToMany;
 import org.springframework.data.annotation.Id;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Person {
@@ -17,7 +21,6 @@ public class Person {
     private int age;
     private String email;
     private String gender;
-
 
     public Person(int id, String name, String gender, String email) {
         this.id = id;
@@ -63,5 +66,17 @@ public class Person {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    // Plusieurs utilisateurs peuvent avoir une historique de plusieurs séries
+    @ManyToMany
+    List<Series> history = new ArrayList<>();
+
+    public List<Series> getHistory(){
+        return history;
+    }
+
+    public void setHistory(List<Series> history){
+        this.history = history;
     }
 }
