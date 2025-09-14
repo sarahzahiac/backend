@@ -58,7 +58,18 @@ public class SeriesService {
         }else {
             logger.warning("Series not found");
         }
+    }
 
+    public List<Series> searchSerie(String genre, Integer nbEpisodes) {
+        if (genre != null && nbEpisodes != null) {
+            return seriesRepository.findByGenreAndNbEpisodesGreaterThanEqual(genre, nbEpisodes);
+        } else if (genre != null) {
+            return seriesRepository.findByGenre(genre);
+        } else if (nbEpisodes != null) {
+            return seriesRepository.findByNbEpisodesGreaterThanEqual(nbEpisodes);
+        }else  {
+            return seriesRepository.findAll();
+        }
     }
 
 
