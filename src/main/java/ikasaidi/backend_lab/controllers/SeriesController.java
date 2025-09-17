@@ -28,7 +28,7 @@ public class SeriesController {
         return seriesService.findById(id);
     }
 
-    //Rendu la
+
     @PostMapping()
     public Series addNewSerie(@RequestBody Series newSeries) {
         return seriesService.newSerie(newSeries);
