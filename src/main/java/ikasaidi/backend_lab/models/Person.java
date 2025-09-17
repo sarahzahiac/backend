@@ -1,10 +1,7 @@
 package ikasaidi.backend_lab.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;

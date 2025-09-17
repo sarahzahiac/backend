@@ -2,6 +2,7 @@ package ikasaidi.backend_lab.services;
 
 import ikasaidi.backend_lab.models.Person;
 import ikasaidi.backend_lab.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -82,6 +83,30 @@ public class PersonService {
         return memoirePerson;
     }
 
+    // Écrire dans un fichier
+    public static void writePersonsToCSV(List<Person> persons, String filePath) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write("id,first_name,last_name,email,gender");
+            bw.newLine();
+
+            for (Person person : persons) {
+                String[] nameParts = person.getName().split(" ", 2);
+                String firstName = nameParts.length > 0 ? nameParts[0] : "";
+                String lastName = nameParts.length > 1 ? nameParts[1] : "";
+
+                bw.write(person.getId() + "," +
+                        firstName + "," +
+                        lastName + "," +
+                        person.getEmail() + "," +
+                        person.getGender());
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            logger.warning("Erreur écriture CSV : " + e.getMessage());
+        }
+    }
+
+
     //Rechercher avec nom
     public List<Person> searchByName(String name) {
         List<Person> allPerson = listPersons();
@@ -95,30 +120,62 @@ public class PersonService {
         return filtered;
     }
 
+    public Person findPersonById(int id) {
+        return listPersons().stream()
+                .filter(p -> p.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Personne non trouvée"));
+    }
+
+
+
     //Ajouter une personne
-    public Person addPerson(Person newPerson){
-        return personRepository.save(newPerson);
+    public Person addPerson(Person newPerson) {
+        String filePath = "data/people.csv";
+        List<Person> persons = listPersons();
+
+        // générer un nouvel ID unique
+        int newId = persons.isEmpty() ? 1 : persons.get(persons.size() - 1).getId() + 1;
+        newPerson.setId(newId);
+
+        persons.add(newPerson);
+
+        writePersonsToCSV(persons, filePath);
+
+        return newPerson;
     }
 
     //Modifier une personne
     public Person updatePerson(int id, Person newData) {
-        return personRepository.findById(id)
-                .map(p -> {
-                    p.setName(newData.getName());
-                    p.setEmail(newData.getEmail());
-                    p.setGender(newData.getGender());
-                    return personRepository.save(p);
-                })
-                .orElse(null);
+        String filePath = "data/people.csv";
+        List<Person> persons = listPersons();
+
+        for (Person p : persons) {
+            if (p.getId() == id) {
+                p.setName(newData.getName());
+                p.setEmail(newData.getEmail());
+                p.setGender(newData.getGender());
+
+                writePersonsToCSV(persons, filePath);
+                return p;
+            }
+        }
+        return null;
     }
+
 
     //Supprimer une personne
-    public boolean deletePerson(int id){
-        if (personRepository.existsById((id))) {
+    public boolean deletePerson(int id) {
+        String filePath = "data/people.csv";
+        List<Person> persons = listPersons();
 
-            personRepository.deleteById(id);
-            return true;
+        boolean removed = persons.removeIf(p -> p.getId() == id);
+
+        if (removed) {
+            writePersonsToCSV(persons, filePath);
         }
-        return false;
+
+        return removed;
     }
+
 }

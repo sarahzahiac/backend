@@ -19,10 +19,12 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Service
 public class RecommendationService {
 
+    //private final PersonService personService;
     private final PersonRepository personRepository;
     private final SeriesRepository seriesRepository;
 
-    public RecommendationService(PersonRepository personRepository, SeriesRepository seriesRepository){
+    public RecommendationService(PersonService personService, PersonRepository personRepository, SeriesRepository seriesRepository){
+        //this.personService = personService;
         this.personRepository = personRepository;
         this.seriesRepository = seriesRepository;
     }
