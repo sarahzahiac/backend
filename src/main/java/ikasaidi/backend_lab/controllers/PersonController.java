@@ -29,6 +29,10 @@ public class PersonController {
         this.personService = personService;
         this.recommendationService = recommendationService;
     }
+    @GetMapping("/person")
+    public List<Person> getAllPersonsFromDB() {
+        return personService.getAllPersons();
+    }
 
     @GetMapping
     public List<Person> getAllPersons() {
