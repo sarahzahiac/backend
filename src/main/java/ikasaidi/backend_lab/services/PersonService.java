@@ -49,38 +49,13 @@ public class PersonService {
         return memoirePerson;
     }
 
-    // Liste csv
-    public List<Person> readListPersons() {
-        List<Person> memoirePerson = new ArrayList<>();
-
-        try (InputStream is = getClass().getResourceAsStream("/data/people.csv")) {
-
-            if (is == null) {
-                throw new RuntimeException("Fichier CSV introuvable !");
-            }
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                br.readLine();
-
-                String line;
-                while ((line = br.readLine()) != null) {
-                    String[] peopleData = line.split(COMMA_DELIMITER);
-                    if (peopleData.length >= 5) {
-                        int id = Integer.parseInt(peopleData[0].trim());
-                        String name = (peopleData[1].trim() + " " + peopleData[2].trim()).trim();
-                        String email = peopleData[3].trim();
-                        String gender = peopleData[4].trim();
-
-                        memoirePerson.add(new Person(id, name, email, gender));
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            logger.info("Erreur lecture CSV : " + e.getMessage());
+    public void bdFromTheStart() {
+        personRepository.deleteAllInBatch(); //mieux la vider avant
+        List<Person> persons = listPersons();
+        if (!persons.isEmpty()) {
+            personRepository.saveAll(persons);
+            System.out.println("Import CSV terminé: " + persons.size() + " personnes");
         }
-
-        return memoirePerson;
     }
 
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/getAllPerson")
+@RequestMapping("/persons")
 @CrossOrigin()
 public class PersonController {
 
@@ -29,14 +29,9 @@ public class PersonController {
         this.personService = personService;
         this.recommendationService = recommendationService;
     }
-    @GetMapping("/person")
+    @GetMapping()
     public List<Person> getAllPersonsFromDB() {
         return personService.getAllPersons();
-    }
-
-    @GetMapping
-    public List<Person> getAllPersons() {
-        return personService.listPersons();
     }
 
     @GetMapping("/search")
@@ -44,7 +39,7 @@ public class PersonController {
         return personService.searchByName(name);
     }
 
-    @PostMapping("/person")
+    @PostMapping()
     public Person createPerson(@RequestBody Person newPerson) {
         return personService.addPerson(newPerson);
     }
@@ -55,12 +50,12 @@ public class PersonController {
     }
 
 
-    @PutMapping("/person/{id}")
+    @PutMapping("/{id}")
     public Person updatePerson(@PathVariable int id, @RequestBody Person updatedPerson) {
         return personService.updatePerson(id, updatedPerson);
     }
 
-    @DeleteMapping("/person/{id}")
+    @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable int id) {
         boolean removed = personService.deletePerson(id);
         return removed ? "Personne supprimée avec succès" : "Personne non trouvée";
