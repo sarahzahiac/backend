@@ -17,8 +17,9 @@ public class BackendLabApplication {
     CommandLineRunner run(PersonService personService) {
         return args -> {
 
+            if (personService.getAllPersons().isEmpty()){
                 personService.bdFromTheStart();
-
+            }
         };
 
 
