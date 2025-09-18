@@ -24,6 +24,10 @@ public class Series {
         this.note = note;
     }
 
+    public Series() {
+
+    }
+
     public Long getId() {
         return id;
     }
