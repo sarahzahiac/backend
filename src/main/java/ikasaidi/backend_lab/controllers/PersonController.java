@@ -9,65 +9,58 @@ import ikasaidi.backend_lab.services.RecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/persons")
 @CrossOrigin()
 public class PersonController {
+
+    private final PersonService personService;
+    private final RecommendationService recommendationService;
+
+    @Autowired
+    private SeriesRepository seriesRepository;
+
     @Autowired
     PersonRepository personRepository;
 
-    @Autowired
-    SeriesRepository seriesRepository;
-    private final PersonService personService;
-
-    private final RecommendationService recommendationService;
-
     public PersonController(PersonService personService, RecommendationService recommendationService) {
-
         this.personService = personService;
         this.recommendationService = recommendationService;
     }
-
-    @GetMapping("/getAllPerson")
-    @ResponseBody
-    public List<Person> getAllPerson() {
-        return personService.listPersons();
+    @GetMapping()
+    public List<Person> getAllPersonsFromDB() {
+        return personService.getAllPersons();
     }
 
     @GetMapping("/search")
-    @ResponseBody
     public List<Person> searchPerson(@RequestParam String name) {
         return personService.searchByName(name);
     }
 
-    @GetMapping
-    public List<Person> getAllPersons() {
-        return personRepository.findAll();
-    }
-
-    @PostMapping
+    @PostMapping()
     public Person createPerson(@RequestBody Person newPerson) {
         return personService.addPerson(newPerson);
     }
 
+    @GetMapping("/{id}")
+    public Person getPerson(@PathVariable int id) {
+        return personService.findPersonById(id);
+    }
+
+
     @PutMapping("/{id}")
-    public Person updatePerson(@PathVariable int id,@RequestBody Person updatedPerson) {
+    public Person updatePerson(@PathVariable int id, @RequestBody Person updatedPerson) {
         return personService.updatePerson(id, updatedPerson);
     }
+
     @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable int id) {
         boolean removed = personService.deletePerson(id);
         return removed ? "Personne supprimée avec succès" : "Personne non trouvée";
     }
 
-
-    // Il va récupérer l'utisateur avec son historique selon son id
     @GetMapping("/{id}/history")
     public List<Series> getUserHistory(@PathVariable int id) {
         Person person = personRepository.findById(id)
@@ -76,7 +69,6 @@ public class PersonController {
         return person.getHistory();
     }
 
-    // Il va ajouter l'id de la nouvelle série vue dans l'historique de la personne selon son id
     @PostMapping("/{id}/history/{seriesId}")
     public Person addSerieToHistory(@PathVariable int id, @PathVariable Long seriesId){
         Person person = personRepository.findById(id)
@@ -88,11 +80,10 @@ public class PersonController {
         return personRepository.save(person);
     }
 
+
+
     @GetMapping("/{id}/recommendation")
-    public List<Series> getRecommendation(@PathVariable int id){
+    public List<Series> getRecommendation(@PathVariable int id) {
         return recommendationService.getPersonsRecommendation(id);
     }
-
-
 }
-
