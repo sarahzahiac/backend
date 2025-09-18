@@ -50,7 +50,6 @@ public class PersonService {
     }
 
     public void bdFromTheStart() {
-        personRepository.deleteAllInBatch(); //mieux la vider avant
         List<Person> persons = listPersons();
         if (!persons.isEmpty()) {
             personRepository.saveAll(persons);
