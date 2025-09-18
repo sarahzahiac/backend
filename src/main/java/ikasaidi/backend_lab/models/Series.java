@@ -17,6 +17,20 @@ public class Series {
     private Long id;
     private String title;
     private String genre;
+    private int nbEpisodes;
+    private double note;
+
+    public Series(Long id, String title, String genre, int nbEpisodes, double note) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.nbEpisodes = nbEpisodes;
+        this.note = note;
+    }
+
+    public Series() {
+
+    }
 
     public Long getId() {
         return id;
@@ -57,9 +71,6 @@ public class Series {
     public void setNote(double note) {
         this.note = note;
     }
-
-    private int nbEpisodes;
-    private double note;
 
 
 }
