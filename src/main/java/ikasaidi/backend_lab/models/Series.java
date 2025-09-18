@@ -1,7 +1,11 @@
 package ikasaidi.backend_lab.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
