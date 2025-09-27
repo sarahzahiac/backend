@@ -1,7 +1,6 @@
 package ikasaidi.backend_lab.services;
 
 import ikasaidi.backend_lab.models.Series;
-import ikasaidi.backend_lab.repositories.PersonRepository;
 import ikasaidi.backend_lab.repositories.SeriesRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,14 +1,14 @@
 package ikasaidi.backend_lab.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Person {
+public class User {
 
     @jakarta.persistence.Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,20 +19,41 @@ public class Person {
     private String email;
     private String gender;
 
-    public Person(int id, String name, String gender, String email) {
+    public User(int id, String name, String gender, String email) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.email = email;
     }
 
-    public Person() {
+    public User() {
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<History> vuesUsers;
+
+    public List<History> getVuesUsers() { return vuesUsers; }
+    public void setVuesUsers(List<History> vuesUsers) { this.vuesUsers = vuesUsers; }
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Evaluation> evaluations = new ArrayList<>();
+
+    public List<Evaluation> getEvaluations() { return evaluations; }
 
 
     public Integer getId() {
         return id;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setEvaluations(List<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

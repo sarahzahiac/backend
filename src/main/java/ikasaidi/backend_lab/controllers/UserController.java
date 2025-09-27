@@ -1,8 +1,8 @@
 package ikasaidi.backend_lab.controllers;
 
-import ikasaidi.backend_lab.models.Person;
+import ikasaidi.backend_lab.models.User;
 import ikasaidi.backend_lab.models.Series;
-import ikasaidi.backend_lab.repositories.PersonRepository;
+import ikasaidi.backend_lab.repositories.UserRepository;
 import ikasaidi.backend_lab.repositories.SeriesRepository;
 import ikasaidi.backend_lab.services.PersonService;
 import ikasaidi.backend_lab.services.RecommendationService;
@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/persons")
 @CrossOrigin()
-public class PersonController {
+public class UserController {
 
     private final PersonService personService;
     private final RecommendationService recommendationService;
@@ -23,36 +23,36 @@ public class PersonController {
     private SeriesRepository seriesRepository;
 
     @Autowired
-    PersonRepository personRepository;
+    UserRepository userRepository;
 
-    public PersonController(PersonService personService, RecommendationService recommendationService) {
+    public UserController(PersonService personService, RecommendationService recommendationService) {
         this.personService = personService;
         this.recommendationService = recommendationService;
     }
     @GetMapping()
-    public List<Person> getAllPersonsFromDB() {
+    public List<User> getAllPersonsFromDB() {
         return personService.getAllPersons();
     }
 
     @GetMapping("/search")
-    public List<Person> searchPerson(@RequestParam String name) {
+    public List<User> searchPerson(@RequestParam String name) {
         return personService.searchByName(name);
     }
 
     @PostMapping()
-    public Person createPerson(@RequestBody Person newPerson) {
-        return personService.addPerson(newPerson);
+    public User createPerson(@RequestBody User newUser) {
+        return personService.addPerson(newUser);
     }
 
     @GetMapping("/{id}")
-    public Person getPerson(@PathVariable int id) {
+    public User getPerson(@PathVariable int id) {
         return personService.findPersonById(id);
     }
 
 
     @PutMapping("/{id}")
-    public Person updatePerson(@PathVariable int id, @RequestBody Person updatedPerson) {
-        return personService.updatePerson(id, updatedPerson);
+    public User updatePerson(@PathVariable int id, @RequestBody User updatedUser) {
+        return personService.updatePerson(id, updatedUser);
     }
 
     @DeleteMapping("/{id}")
@@ -63,21 +63,21 @@ public class PersonController {
 
     @GetMapping("/{id}/history")
     public List<Series> getUserHistory(@PathVariable int id) {
-        Person person = personRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Personne non trouvée"));
 
-        return person.getHistory();
+        return user.getHistory();
     }
 
     @PostMapping("/{id}/history/{seriesId}")
-    public Person addSerieToHistory(@PathVariable int id, @PathVariable Long seriesId){
-        Person person = personRepository.findById(id)
+    public User addSerieToHistory(@PathVariable int id, @PathVariable Long seriesId){
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Personne non trouvée"));
         Series series = seriesRepository.findById(seriesId)
                 .orElseThrow(() -> new RuntimeException("Série non trouvée"));
 
-        person.getHistory().add(series);
-        return personRepository.save(person);
+        user.getHistory().add(series);
+        return userRepository.save(user);
     }
 
 
@@ -86,4 +86,5 @@ public class PersonController {
     public List<Series> getRecommendation(@PathVariable int id) {
         return recommendationService.getPersonsRecommendation(id);
     }
+
 }

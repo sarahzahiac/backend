@@ -1,6 +1,5 @@
 package ikasaidi.backend_lab.controllers;
 
-import ikasaidi.backend_lab.models.Person;
 import ikasaidi.backend_lab.models.Series;
 import ikasaidi.backend_lab.services.SeriesService;
 import org.springframework.web.bind.annotation.*;

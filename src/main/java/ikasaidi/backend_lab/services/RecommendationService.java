@@ -1,31 +1,27 @@
 package ikasaidi.backend_lab.services;
 
 
-import ikasaidi.backend_lab.models.Person;
+import ikasaidi.backend_lab.models.User;
 import ikasaidi.backend_lab.models.Series;
-import ikasaidi.backend_lab.repositories.PersonRepository;
+import ikasaidi.backend_lab.repositories.UserRepository;
 import ikasaidi.backend_lab.repositories.SeriesRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Service
 public class RecommendationService {
 
     //private final PersonService personService;
-    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
     private final SeriesRepository seriesRepository;
 
-    public RecommendationService(PersonService personService, PersonRepository personRepository, SeriesRepository seriesRepository){
+    public RecommendationService(PersonService personService, UserRepository userRepository, SeriesRepository seriesRepository){
         //this.personService = personService;
-        this.personRepository = personRepository;
+        this.userRepository = userRepository;
         this.seriesRepository = seriesRepository;
     }
 
@@ -33,8 +29,8 @@ public class RecommendationService {
 
         // Il va compter le nombre de genres le plus vus dans la liste history
 
-            Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("Personne non trouvée"));
-            List<Series> history = person.getHistory();
+            User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Personne non trouvée"));
+            List<Series> history = user.getHistory();
 
             Map<String, Integer> genreCount = new HashMap<>();
             for(Series series : history){

@@ -1,8 +1,7 @@
 package ikasaidi.backend_lab.services;
 
-import ikasaidi.backend_lab.models.Person;
-import ikasaidi.backend_lab.repositories.PersonRepository;
-import jakarta.transaction.Transactional;
+import ikasaidi.backend_lab.models.User;
+import ikasaidi.backend_lab.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -13,18 +12,18 @@ import java.util.logging.Logger;
 @Service
 public class PersonService {
 
-    private final PersonRepository personRepository;
-    public PersonService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    private final UserRepository userRepository;
+    public PersonService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     private static final Logger logger = Logger.getLogger(PersonService.class.getName());
     public static final String COMMA_DELIMITER = ",";
 
     //Retourne une liste
-    public List<Person> listPersons() {
+    public List<User> listPersons() {
         String personFilePath = "data/people.csv";
-        List<Person> memoirePerson = new ArrayList<>();
+        List<User> memoireUsers = new ArrayList<>();
 
         try(BufferedReader br = new BufferedReader(new FileReader(personFilePath))) {
             //Pour ignorer la premiere ligne du fichier
@@ -40,62 +39,62 @@ public class PersonService {
                     String email = peopleData[3].trim();
                     String gender = peopleData[4].trim();
 
-                    memoirePerson.add(new Person(id, name, gender, email));
+                    memoireUsers.add(new User(id, name, gender, email));
                 }
             }
         }  catch (IOException e) {
             logger.info(e.getMessage());
         }
-        return memoirePerson;
+        return memoireUsers;
     }
 
     public void bdFromTheStart() {
-        List<Person> persons = listPersons();
-        if (!persons.isEmpty()) {
-            personRepository.saveAll(persons);
-            System.out.println("Import CSV terminé: " + persons.size() + " personnes");
+        List<User> users = listPersons();
+        if (!users.isEmpty()) {
+            userRepository.saveAll(users);
+            System.out.println("Import CSV terminé: " + users.size() + " personnes");
         }
     }
 
 
     //Rechercher avec nom
-    public List<Person> searchByName(String name) {
-        List<Person> allPerson = listPersons();
-        List<Person> filtered = new ArrayList<>();
+    public List<User> searchByName(String name) {
+        List<User> allUsers = listPersons();
+        List<User> filtered = new ArrayList<>();
 
-        for (Person person : allPerson) {
-            if (person.getName().toLowerCase().contains(name.toLowerCase())) {
-                filtered.add(person);
+        for (User user : allUsers) {
+            if (user.getName().toLowerCase().contains(name.toLowerCase())) {
+                filtered.add(user);
             }
         }
         return filtered;
     }
 
-    public List<Person> getAllPersons() {
-        return personRepository.findAll();
+    public List<User> getAllPersons() {
+        return userRepository.findAll();
     }
 
     // Trouver une personne
-    public Person findPersonById(int id) {
-        return personRepository.findById(id)
+    public User findPersonById(int id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Personne non trouvée"));
     }
 
-    public Person addPerson(Person newPerson) {
-        return personRepository.save(newPerson);
+    public User addPerson(User newUser) {
+        return userRepository.save(newUser);
     }
 
-    public Person updatePerson(int id, Person newData) {
-        Person p = findPersonById(id);
+    public User updatePerson(int id, User newData) {
+        User p = findPersonById(id);
         p.setName(newData.getName());
         p.setEmail(newData.getEmail());
         p.setGender(newData.getGender());
-        return personRepository.save(p);
+        return userRepository.save(p);
     }
 
     public boolean deletePerson(int id) {
-        if (personRepository.existsById(id)) {
-            personRepository.deleteById(id);
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
             return true;
         }
         return false;

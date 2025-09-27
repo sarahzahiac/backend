@@ -1,14 +1,14 @@
 package ikasaidi.backend_lab.repositories;
 
-import ikasaidi.backend_lab.models.Person;
+import ikasaidi.backend_lab.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Integer> {
-    List<Person> findByNameContainingIgnoreCase(String name);
+public interface UserRepository extends JpaRepository<User, Integer> {
+    List<User> findByNameContainingIgnoreCase(String name);
 
 
 }

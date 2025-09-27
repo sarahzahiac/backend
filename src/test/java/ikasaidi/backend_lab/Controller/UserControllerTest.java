@@ -1,12 +1,10 @@
 package ikasaidi.backend_lab.Controller;
 
-import ikasaidi.backend_lab.controllers.PersonController;
-import ikasaidi.backend_lab.models.Person;
+import ikasaidi.backend_lab.controllers.UserController;
+import ikasaidi.backend_lab.models.User;
 import ikasaidi.backend_lab.models.Series;
-import ikasaidi.backend_lab.repositories.PersonRepository;
+import ikasaidi.backend_lab.repositories.UserRepository;
 import ikasaidi.backend_lab.repositories.SeriesRepository;
-import ikasaidi.backend_lab.services.PersonService;
-import ikasaidi.backend_lab.services.RecommendationService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,15 +31,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 //Pour tester la méthode addHistory ou la logique n'est pas dans le service mais dans le controller
 @ExtendWith(MockitoExtension.class)
-class PersonControllerTest {
+class UserControllerTest {
 
     private MockMvc mvc;
 
-    @Mock private PersonRepository personRepository;
+    @Mock private UserRepository userRepository;
     @Mock private SeriesRepository seriesRepository;
 
     @InjectMocks
-    private PersonController personController;
+    private UserController userController;
 
     @BeforeEach
     void setup() {
@@ -49,25 +47,25 @@ class PersonControllerTest {
         //Pour débuger , cuz sprint injecte rien vu qu'on utilise mockito et
         // c'est autowired. on force l'injection
 
-        ReflectionTestUtils.setField(personController, "personRepository", personRepository);
-        ReflectionTestUtils.setField(personController, "seriesRepository", seriesRepository);
+        ReflectionTestUtils.setField(userController, "personRepository", userRepository);
+        ReflectionTestUtils.setField(userController, "seriesRepository", seriesRepository);
 
-        mvc = MockMvcBuilders.standaloneSetup(personController).build();
+        mvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
     @Test
     void addSerieToHistory() throws Exception {
 
         //Arrange
-        Person person = new Person(1, "Alice Smith", "Female", "alice@x.com");
-        person.setHistory(new ArrayList<>());
+        User user = new User(1, "Alice Smith", "Female", "alice@x.com");
+        user.setHistory(new ArrayList<>());
 
         Series series = new Series(2L, "Dark", "Sci-Fi", 26, 9.2);
 
         //Mock
-        when(personRepository.findById(1)).thenReturn(Optional.of(person));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(seriesRepository.findById(2L)).thenReturn(Optional.of(series));
-        when(personRepository.save(person)).thenReturn(person);
+        when(userRepository.save(user)).thenReturn(user);
 
 
         MockHttpServletResponse response = mvc.perform(
@@ -89,10 +87,10 @@ class PersonControllerTest {
     @Test
     void addSerieToHistoryPersonNotFound()  {
 
-        when(personRepository.findById(123)).thenReturn(Optional.empty());
+        when(userRepository.findById(123)).thenReturn(Optional.empty());
 
         RuntimeException ex = assertThrows(RuntimeException.class, () ->
-                personController.addSerieToHistory(123, 2L)
+                userController.addSerieToHistory(123, 2L)
         );
         assertEquals("Personne non trouvée", ex.getMessage());
 
@@ -102,13 +100,13 @@ class PersonControllerTest {
     void addSerieToHistorySeriesNotFound()  {
 
         // Arrange, la personne OK, mais la série introuvable
-        Person person = new Person(1, "Alice Smith", "Female", "alice@x.com");
-        person.setHistory(new ArrayList<>());
-        when(personRepository.findById(1)).thenReturn(Optional.of(person));
+        User user = new User(1, "Alice Smith", "Female", "alice@x.com");
+        user.setHistory(new ArrayList<>());
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(seriesRepository.findById(999L)).thenReturn(Optional.empty());
 
         RuntimeException ex = assertThrows(RuntimeException.class, () ->
-                personController.addSerieToHistory(1, 999L)
+                userController.addSerieToHistory(1, 999L)
         );
         assertEquals("Série non trouvée", ex.getMessage());;
 

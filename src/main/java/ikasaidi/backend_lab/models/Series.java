@@ -32,6 +32,13 @@ public class Series {
 
     }
 
+    @OneToMany(mappedBy = "series")
+    @JsonIgnore
+    private List<Evaluation> evaluations = new ArrayList<>();
+
+    public List<Evaluation> getEvaluations() { return evaluations; }
+
+
     public Long getId() {
         return id;
     }
