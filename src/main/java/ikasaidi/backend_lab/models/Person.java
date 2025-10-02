@@ -1,6 +1,7 @@
 package ikasaidi.backend_lab.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
@@ -76,4 +77,20 @@ public class Person {
     public void setHistory(List<Series> history){
         this.history = history;
     }
+
+    @OneToMany(mappedBy = "person")
+    @JsonIgnore
+    private List<Ratings> ratings = new ArrayList<>();
+
+    public List<Ratings> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Ratings> ratings) {
+        this.ratings = ratings;
+    }
+
+    @OneToMany(mappedBy = "person")
+    private List<VuesHistory> viewsHistories = new ArrayList<>();
+
 }

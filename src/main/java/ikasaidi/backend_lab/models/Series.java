@@ -72,5 +72,23 @@ public class Series {
         this.note = note;
     }
 
+    @OneToMany(mappedBy = "series")
+    @JsonIgnore
+    private List<Ratings> ratings = new ArrayList<>();
+
+    public List<Ratings> getRatings() {
+        return ratings;
+    }
+
+    @OneToMany(mappedBy = "series")
+    private List<VuesHistory> viewsHistories = new ArrayList<>();
+
+
+    public void setRatings(List<Ratings> ratings) {
+        this.ratings = ratings;
+    }
 
 }
+
+
+
