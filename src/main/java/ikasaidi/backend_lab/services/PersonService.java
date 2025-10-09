@@ -39,8 +39,10 @@ public class PersonService {
                     String name = (peopleData[1].trim()+ " " + peopleData[2].trim()).trim();
                     String email = peopleData[3].trim();
                     String gender = peopleData[4].trim();
+                    String password = peopleData[5].trim();
 
-                    memoirePerson.add(new Person(id, name, gender, email));
+
+                    memoirePerson.add(new Person(id, name, gender, email, password));
                 }
             }
         }  catch (IOException e) {
@@ -100,5 +102,11 @@ public class PersonService {
         }
         return false;
     }
+//    //Hachage du mot de passé avant de sauvegarder AHH!
+//    public Person people(Person person) {
+//        String hashedPassword = bCryptPasswordEncoder.encode(person.getPassword());
+//        person.setPassword(hashedPassword);
+//        return personRepository.save(person);
+//    }
 
 }

@@ -59,7 +59,7 @@ class PersonControllerTest {
     void addSerieToHistory() throws Exception {
 
         //Arrange
-        Person person = new Person(1, "Alice Smith", "Female", "alice@x.com");
+        Person person = new Person(1, "Alice Smith", "Female", "alice@x.com", "abc123x");
         person.setHistory(new ArrayList<>());
 
         Series series = new Series(2L, "Dark", "Sci-Fi", 26, 9.2);
@@ -102,7 +102,7 @@ class PersonControllerTest {
     void addSerieToHistorySeriesNotFound()  {
 
         // Arrange, la personne OK, mais la série introuvable
-        Person person = new Person(1, "Alice Smith", "Female", "alice@x.com");
+        Person person = new Person(1, "Alice Smith", "Female", "alice@x.com", "abc123x");
         person.setHistory(new ArrayList<>());
         when(personRepository.findById(1)).thenReturn(Optional.of(person));
         when(seriesRepository.findById(999L)).thenReturn(Optional.empty());
