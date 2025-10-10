@@ -1,3 +1,7 @@
+
+
+
+
 package ikasaidi.backend_lab.controllers;
 
 import ikasaidi.backend_lab.models.Person;
@@ -28,7 +32,7 @@ public class RatingsController {
         this.seriesRepository = seriesRepository;
     }
 
-    // 🔹 Récupérer toutes les évaluations
+    // Récupérer toutes les évaluations
     @GetMapping
     public List<Ratings> getAllRatings() {
         return ratingsRepository.findAll();
@@ -43,3 +47,4 @@ public class RatingsController {
         return ratingsRepository.findByPerson(person.get());
     }
 }
+
