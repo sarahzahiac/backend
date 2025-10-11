@@ -53,7 +53,7 @@ public class AuthentificationService {
         newUser.setEmail(request.getEmail());
         newUser.setName(request.getName());
         newUser.setGender(request.getGender());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword())); //bcrypte le code (hachés)
+        newUser.setPassword(passwordEncoder.encode(request.getPassword())); //bcrypte le code (hachés) voir sqlite
 
         Person saved = personRepository.save(newUser);
         String token = jwtUtil.generateToken(saved.getEmail());
