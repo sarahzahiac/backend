@@ -25,9 +25,18 @@ public class AuthentificationService {
     public ReponseAuthentification connexion(Connexion request) {
         return personRepository.findByEmail(request.getEmail())
                 .map(person -> {
-                    if (!passwordEncoder.matches(request.getPassword(), person.getPassword())) {
+                    boolean passwordOk = false;
+
+                    if (person.getPassword().startsWith("$2a$")) {
+                        passwordOk = passwordEncoder.matches(request.getPassword(), person.getPassword());
+                    } else {
+                        passwordOk = person.getPassword().equals(request.getPassword());
+                    }
+
+                    if (!passwordOk) {
                         return new ReponseAuthentification(false, "Mot de passe incorrect", null, null, null);
                     }
+
                     String token = jwtUtil.generateToken(person.getEmail());
                     return new ReponseAuthentification(true, "Connexion réussie!", person.getId(), person.getName(), token);
                 })
