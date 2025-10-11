@@ -2,6 +2,7 @@ package ikasaidi.backend_lab.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
@@ -79,7 +80,7 @@ public class Person {
     }
 
     @OneToMany(mappedBy = "person")
-    @JsonIgnore
+    @JsonIgnoreProperties({"person"})
     private List<Ratings> ratings = new ArrayList<>();
 
     public List<Ratings> getRatings() {

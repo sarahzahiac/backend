@@ -1,5 +1,6 @@
 package ikasaidi.backend_lab.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 
@@ -14,10 +15,12 @@ public class Ratings {
 
     @ManyToOne
     @JoinColumn(name = "person_id")
+    @JsonIgnoreProperties({"ratings", "history", "viewsHistories"})
     private Person person;   // utilisateur qui a noté
 
     @ManyToOne
     @JoinColumn(name = "series_id")
+    @JsonIgnoreProperties({"ratings", "viewsHistories"})
     private Series series;   // série notée
 
     public Ratings() {}

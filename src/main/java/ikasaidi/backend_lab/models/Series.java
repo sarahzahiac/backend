@@ -1,6 +1,7 @@
 package ikasaidi.backend_lab.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -73,7 +74,7 @@ public class Series {
     }
 
     @OneToMany(mappedBy = "series")
-    @JsonIgnore
+    @JsonIgnoreProperties({"series", "person"})
     private List<Ratings> ratings = new ArrayList<>();
 
     public List<Ratings> getRatings() {
@@ -81,6 +82,7 @@ public class Series {
     }
 
     @OneToMany(mappedBy = "series")
+    @JsonIgnoreProperties({"series", "person"})
     private List<VuesHistory> viewsHistories = new ArrayList<>();
 
 

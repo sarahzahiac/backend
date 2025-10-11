@@ -38,7 +38,7 @@ public class VuesHistory {
     }
 
     public VuesHistory(LocalDate randomDate, int progress, Person person, Series series) {
-        this.dateWatched = dateWatched;
+        this.dateWatched = randomDate;
         this.progress = progress;
         this.person = person;
         this.series = series;
