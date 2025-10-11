@@ -24,5 +24,12 @@ public class AuthentificationController {
         }
         return ResponseEntity.ok(auth);
     }
-
+    @PostMapping("/register")
+    public ResponseEntity<ReponseAuthentification> register(@RequestBody Connexion request) {
+        ReponseAuthentification resp = authentificationService.register(request);
+        if (!resp.isSuccess()) {
+            return ResponseEntity.status(400).body(resp);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }
