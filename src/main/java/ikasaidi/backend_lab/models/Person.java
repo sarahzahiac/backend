@@ -12,19 +12,22 @@ import java.util.List;
 public class Person {
 
     @jakarta.persistence.Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
     private int age;
     private String email;
     private String gender;
+    private String password; // --> Ajout de l'attribut password
 
-    public Person(int id, String name, String gender, String email) {
+    public Person(int id, String name, String gender, String email, String password) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.email = email;
+        this.password = password;
+
     }
 
     public Person() {
@@ -66,6 +69,13 @@ public class Person {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     // Plusieurs utilisateurs peuvent avoir une historique de plusieurs séries
     @ManyToMany
     List<Series> history = new ArrayList<>();
