@@ -2,6 +2,7 @@ package ikasaidi.backend_lab.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
@@ -78,6 +79,7 @@ public class Person {
     }
     // Plusieurs utilisateurs peuvent avoir une historique de plusieurs séries
     @ManyToMany
+    @JsonIgnoreProperties({"viewsHistories", "ratings"})
     List<Series> history = new ArrayList<>();
 
     public List<Series> getHistory(){
@@ -89,7 +91,7 @@ public class Person {
     }
 
     @OneToMany(mappedBy = "person")
-    @JsonIgnore
+    @JsonIgnoreProperties({"person", "series"})
     private List<Ratings> ratings = new ArrayList<>();
 
     public List<Ratings> getRatings() {
@@ -101,6 +103,7 @@ public class Person {
     }
 
     @OneToMany(mappedBy = "person")
+    @JsonIgnoreProperties({"person", "series"})
     private List<VuesHistory> viewsHistories = new ArrayList<>();
 
 }
