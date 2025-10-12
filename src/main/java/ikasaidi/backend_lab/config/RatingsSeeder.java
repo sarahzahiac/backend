@@ -29,10 +29,6 @@ public class RatingsSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (ratingsRepository.count() > 0) {
-            System.out.println("Ratings déjà existants → aucun nouvel ajout");
-            return;
-        }
 
         List<Person> persons = personRepository.findAll();
         List<Series> seriesList = seriesRepository.findAll();
@@ -43,21 +39,24 @@ public class RatingsSeeder implements CommandLineRunner {
         }
 
         Random random = new Random();
+        int inserted = 0;
 
         for (Person p : persons) {
             for (Series s : seriesList) {
                 // Chaque personne ne note pas forcément chaque série
-                if (random.nextBoolean()) {
-                    int score = random.nextInt(5) + 1; // note entre 1 et 5
-                    Ratings rating = new Ratings(score, p, s);
-                    ratingsRepository.save(rating);
 
-                    System.out.println(p.getName() + " a noté "
-                            + s.getTitle() + " : " + score);
+                if (!ratingsRepository.existsByPersonAndSeries(p, s)) {
+                    if (random.nextBoolean()) {
+                        int score = random.nextInt(5) + 1; // note entre 1 et 5
+                        Ratings rating = new Ratings(score, p, s);
+                        ratingsRepository.save(rating);
+
+                        inserted++;
+                    }
                 }
             }
         }
 
-        System.out.println("Génération des évaluations terminée !");
+        System.out.println("Ratings ajoutés (nouveaux) : " + inserted);
     }
 }
