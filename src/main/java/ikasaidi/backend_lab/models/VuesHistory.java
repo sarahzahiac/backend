@@ -1,6 +1,7 @@
 package ikasaidi.backend_lab.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class VuesHistory {
     private int progress;          // progression (épisode ou % vu)
 
     @ManyToOne
+    @JsonIgnoreProperties({"viewsHistories", "history", "ratings"})
     private Person person;
 
     public Long getId() {
@@ -78,5 +80,6 @@ public class VuesHistory {
     }
 
     @ManyToOne
+    @JsonIgnoreProperties({"viewsHistories", "ratings", "persons"})
     private Series series;
 }
