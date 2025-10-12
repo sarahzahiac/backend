@@ -12,6 +12,7 @@ public class VuesHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "date_watched", nullable = false)
     private LocalDate dateWatched; // date de visionnage
     private int progress;          // progression (épisode ou % vu)
 
@@ -38,10 +39,18 @@ public class VuesHistory {
     }
 
     public VuesHistory(LocalDate randomDate, int progress, Person person, Series series) {
-        this.dateWatched = dateWatched;
+        this.dateWatched = randomDate;
         this.progress = progress;
         this.person = person;
         this.series = series;
+    }
+
+    // si la date est null, on met aujourd'hui
+    @PrePersist
+    void ensureDate() {
+        if (this.dateWatched == null) {
+            this.dateWatched = LocalDate.now();
+        }
     }
 
     public int getProgress() {

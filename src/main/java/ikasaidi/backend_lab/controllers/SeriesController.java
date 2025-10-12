@@ -1,8 +1,10 @@
 package ikasaidi.backend_lab.controllers;
 
+import ikasaidi.backend_lab.DTO.TrendingDto;
 import ikasaidi.backend_lab.models.Person;
 import ikasaidi.backend_lab.models.Series;
 import ikasaidi.backend_lab.services.SeriesService;
+import ikasaidi.backend_lab.services.TrendingService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.List;
 public class SeriesController {
 
     private final SeriesService seriesService;
+    private final TrendingService trendingService;
 
-    public SeriesController(SeriesService seriesService) {
+    public SeriesController(SeriesService seriesService, TrendingService trendingService) {
         this.seriesService = seriesService;
+        this.trendingService = trendingService;
     }
 
     @GetMapping
@@ -48,6 +52,13 @@ public class SeriesController {
     public List<Series> searchSerie (@RequestParam(required = false) String genre, @RequestParam(required = false) Integer nbEpisodes) {
         return seriesService.searchSerie(genre, nbEpisodes);
     }
+
+    @GetMapping("/trending")
+    public List<TrendingDto> getTrending() {
+        return trendingService.getTrending();
+    }
+
+
 
 
 }
