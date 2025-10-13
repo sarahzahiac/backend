@@ -21,6 +21,8 @@ public class Series {
     private int nbEpisodes;
     private double note;
 
+
+
     public Series(Long id, String title, String genre, int nbEpisodes, double note) {
         this.id = id;
         this.title = title;
@@ -72,6 +74,11 @@ public class Series {
     public void setNote(double note) {
         this.note = note;
     }
+
+
+    @OneToMany(mappedBy = "series")
+    @JsonIgnoreProperties("series")
+    private List<Episodes> episodes = new ArrayList<>();
 
     @OneToMany(mappedBy = "series")
     @JsonIgnoreProperties({"series", "person"})
