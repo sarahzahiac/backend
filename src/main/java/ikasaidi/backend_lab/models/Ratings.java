@@ -23,12 +23,26 @@ public class Ratings {
     @JsonIgnoreProperties({"ratings", "viewsHistories", "persons"})
     private Series series;   // série notée
 
+    @ManyToOne
+    @JoinColumn(name = "episode_id")
+    @JsonIgnoreProperties({"ratings", "series"})
+    private Episodes episode;
+
+
+
     public Ratings() {}
 
     public Ratings(int score, Person person, Series series) {
         this.score = score;
         this.person = person;
         this.series = series;
+    }
+
+    public Ratings(int score, Person person, Episodes episode) {
+        this.score = score;
+        this.person = person;
+        this.episode = episode;
+        this.series = episode.getSeries();
     }
 
     // --- Getters & Setters ---
@@ -62,5 +76,12 @@ public class Ratings {
 
     public void setSeries(Series series) {
         this.series = series;
+    }
+
+    public Episodes getEpisode() {
+        return episode;
+    }
+    public void setEpisode(Episodes episode) {
+        this.episode = episode;
     }
 }
