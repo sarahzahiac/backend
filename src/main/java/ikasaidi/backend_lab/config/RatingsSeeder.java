@@ -13,6 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Classe responsable de l’initialisation des évaluations (ratings) dans la base de données.
+ *
+ * Elle génère automatiquement des notes aléatoires associées à des épisodes et des utilisateurs
+ * au démarrage du serveur.
+ *
+ *
+ * Localisation des données générées : table <strong>ratings</strong>
+ *
+ * @author Rachel
+ * @author Ikram
+ * @author Sarah
+ * @version 1.0
+ */
 @Transactional
 @Component
 public class RatingsSeeder implements CommandLineRunner {
@@ -21,6 +35,14 @@ public class RatingsSeeder implements CommandLineRunner {
     private final EpisodesRepository episodeRepository;
     private final RatingsRepository ratingsRepository;
 
+
+    /**
+     * Constructeur du seeder des évaluations.
+     *
+     * @param personRepository repository des utilisateurs
+     * @param episodeRepository repository des épisodes
+     * @param ratingsRepository repository des évaluations
+     */
     public RatingsSeeder(PersonRepository personRepository,
                          EpisodesRepository episodeRepository,
                          RatingsRepository ratingsRepository) {
@@ -29,6 +51,12 @@ public class RatingsSeeder implements CommandLineRunner {
         this.ratingsRepository = ratingsRepository;
     }
 
+    /**
+     * Exécutée automatiquement au démarrage.
+     * Génère des notes aléatoires entre 1 et 5 pour certains épisodes.
+     *
+     * @param args arguments de la ligne de commande (non utilisés)
+     */
     @Override
     public void run(String... args) {
 

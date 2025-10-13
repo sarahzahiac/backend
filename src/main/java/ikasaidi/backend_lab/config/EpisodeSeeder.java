@@ -9,17 +9,44 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+
+/**
+ * Classe responsable de l’initialisation des épisodes dans la base de données.
+ *
+ * Cette classe insère automatiquement des épisodes de test
+ * au démarrage de l’application afin de simuler des données
+ * pour les séries existantes.
+ *
+ *
+ * Localisation des données générées : table <strong>episodes</strong>
+ *
+ * @author Sarah
+ * @version 1.0
+ */
 @Component
 public class EpisodeSeeder implements CommandLineRunner {
 
     private final EpisodesRepository episodesRepository;
     private final SeriesRepository seriesRepository;
 
+
+    /**
+     * Constructeur injectant le repository des épisodes.
+     *
+     * @param episodesRepository repository pour accéder aux données des épisodes
+     * @param seriesRepository le repository des séries
+     */
     public EpisodeSeeder(EpisodesRepository episodesRepository, SeriesRepository seriesRepository) {
         this.episodesRepository = episodesRepository;
         this.seriesRepository = seriesRepository;
     }
 
+    /**
+     * Méthode exécutée automatiquement au lancement de l’application.
+     * Ajoute des épisodes de démonstration s’ils n’existent pas déjà.
+     *
+     * @param args arguments de la ligne de commande (non utilisés)
+     */
     @Override
     public void run(String... args) {
 
