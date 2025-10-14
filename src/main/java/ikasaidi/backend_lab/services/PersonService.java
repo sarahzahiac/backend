@@ -4,7 +4,7 @@ import ikasaidi.backend_lab.models.Person;
 import ikasaidi.backend_lab.repositories.PersonRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,31 +68,18 @@ public class PersonService {
      *
      * @return une liste de personnes lues depuis le fichier CSV
      */
- public List<Person> listPersons() {
-    String personFilePath = "data/people.csv";
-    List<Person> memoirePerson = new ArrayList<>();
+    public List<Person> listPersons() {
+        String personFilePath = "data/people.csv";
+        List<Person> memoirePerson = new ArrayList<>();
 
-    try (BufferedReader br = new BufferedReader(new FileReader(personFilePath))) {
-        // Ignorer la première ligne (en-têtes du fichier)
-        br.readLine();
+        try (BufferedReader br = new BufferedReader(new FileReader(personFilePath))) {
+            // Ignorer la première ligne (en-têtes du fichier)
+            br.readLine();
 
-        String line;
-        int lineNumber = 1; // pour debug (1 = header)
-        while ((line = br.readLine()) != null) {
-            lineNumber++;
-            if (line.trim().isEmpty()) {
-                // ignorer les lignes vides
-                continue;
-            }
-
-            // split en conservant les champs vides éventuels
-            String[] peopleData = line.split(COMMA_DELIMITER, -1);
-            // debug : afficher la ligne si jamais on a un souci
-            // logger.info("DEBUG: ligne " + lineNumber + " -> " + Arrays.toString(peopleData));
-
-            try {
-                // Cas le plus complet attendu : id, prénom, nom, email, genre, password (6 colonnes)
-                if (peopleData.length >= 6) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] peopleData = line.split(COMMA_DELIMITER);
+                if (peopleData.length >= 5) {
                     int id = Integer.parseInt(peopleData[0].trim());
                     String name = (peopleData[1].trim() + " " + peopleData[2].trim()).trim();
                     String email = peopleData[3].trim();
@@ -101,33 +88,13 @@ public class PersonService {
 
                     memoirePerson.add(new Person(id, name, gender, email, password));
                 }
-                // Cas alternatif : 5 colonnes (id, nom complet, email, genre, password)
-                else if (peopleData.length == 5) {
-                    int id = Integer.parseInt(peopleData[0].trim());
-                    String name = peopleData[1].trim();
-                    String email = peopleData[2].trim();
-                    String gender = peopleData[3].trim();
-                    String password = peopleData[4].trim();
-
-                    memoirePerson.add(new Person(id, name, gender, email, password));
-                }
-                // Autres formats : ignorer mais logger pour debug
-                else {
-                    logger.warning("Ligne " + lineNumber + " ignorée : format inattendu -> " + Arrays.toString(peopleData));
-                }
-            } catch (NumberFormatException nfe) {
-                logger.warning("Ligne " + lineNumber + " ignorée : id non numérique -> " + Arrays.toString(peopleData));
-            } catch (Exception ex) {
-                logger.warning("Erreur lors du parsing ligne " + lineNumber + " : " + ex.getMessage());
             }
+        } catch (IOException e) {
+            logger.info(e.getMessage());
         }
-    } catch (FileNotFoundException fnf) {
-        logger.info("Fichier non trouvé : " + fnf.getMessage());
-    } catch (IOException e) {
-        logger.info(e.getMessage());
+        return memoirePerson;
     }
-    return memoirePerson;
-}
+
     /**
      * Charge les données du fichier CSV et les insère dans la base de données.
      *
