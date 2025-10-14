@@ -13,6 +13,19 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ * Classe responsable de l’initialisation de l’historique des vues.
+ *
+ * Cette classe simule le comportement des utilisateurs qui ont visionné
+ * certains séries, afin de fournir des données de démonstration.
+ *
+ *
+ *Localisation des données générées : table <strong>vues_history</strong>
+ *
+ * @author Rachel
+ * @version 1.0
+ */
 @Component
 public class VuesHistorySeeder implements CommandLineRunner {
 
@@ -21,12 +34,24 @@ public class VuesHistorySeeder implements CommandLineRunner {
     private final VuesHistoryRepository vuesHistoryRepository;
 
 
+    /**
+     * Constructeur du seeder d’historique des vues.
+     *
+     * @param personRepository repository des utilisateurs
+     * @param seriesRepository repository des épisodes
+     * @param vuesHistoryRepository repository des historiques de vues
+     */
     public VuesHistorySeeder(PersonRepository personRepository, SeriesRepository seriesRepository, VuesHistoryRepository vuesHistoryRepository) {
         this.personRepository = personRepository;
         this.seriesRepository = seriesRepository;
         this.vuesHistoryRepository = vuesHistoryRepository;
     }
 
+    /**
+     * Méthode exécutée au démarrage pour insérer des historiques de visionnement factices.
+     *
+     * @param args arguments de la ligne de commande (non utilisés)
+     */
     @Override
     public void run(String... args) {
         List<Person> persons = personRepository.findAll();
