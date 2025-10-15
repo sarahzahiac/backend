@@ -58,12 +58,17 @@ mvn javadoc:javadoc
 
 ### ➡️ Puis ouvre le fichier :
 ```bash
-target/site/reports/apidocs/index.html
+target/reports/apidocs/index.html
 ```
 ### 🐳 Docker
-(À faire)
 - Contruire l'image Docker
+```bash
+docker build -t maintenannce-env:base
+```
 - Lancer le conteneur
+```bash
+docker run -it maintenance-env:base bash
+```
 
 ### Liens
 - 📚 [Documentation JavaDoc](target/reports/apidocs/index.html)
@@ -75,7 +80,7 @@ target/site/reports/apidocs/index.html
 |-------------------|-------------------------------------------|
 | Rachel Silencieux | Développement backend + documentation     |
 | Sarah Charef      | Développement backend                     |
-| Ikram Saidi       | Développement backend                     |
+| Ikram Saidi       | Développement backend + tests unitaires                    |
 | Aya Issa          | Développement frontend + authentification |
 
 ---
