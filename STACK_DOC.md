@@ -5,8 +5,8 @@
 |------------|----------|
 | JDK | 17.0.2 |
 | Maven | 3.9.x |
-| Spring Boot | 3.x |
-| SQLite | 3.x |
+| Spring Boot | 3.5.5 |
+| SQLite | 3.45.1.0 |
 | Docker | 25.x |
 | Jenkins | 2.x |
 
@@ -25,7 +25,7 @@ Voici les principaux dossiers du projet et leur rôle :
 | `config/` | Contient les classes “Seeder” pour insérer des données initiales |
 | `Securiter/` | Configuration de la sécurité Spring Boot (JWT, filtres, accès) |
 | `utils/` | Classes utilitaires (génération et validation des tokens JWT) |
-
+| `test/` | Tests unitaires et d’intégration du backend |
 ---
 
 ## 🧰 Commandes Maven et Docker
@@ -41,8 +41,8 @@ Voici les principaux dossiers du projet et leur rôle :
 ### 🐳 Docker
 | Action | Commande  |
 |--------|-----------|
-| Construire l’image Docker | `à faire` |
-| Lancer le conteneur | `à faire` |
+| Construire l’image Docker | `docker build -t maintenance-env:base` |
+| Lancer le conteneur | `docker run -it maintenance-env:base bash` |
 
 ---
 
@@ -108,7 +108,7 @@ Le projet utilise **SQLite** comme base de données embarquée.
 |-------------------|-------------------------------------------|
 | Rachel Silencieux | Développement backend + documentation     |
 | Sarah Charef      | Développement backend                     |
-| Ikram Saidi       | Développement backend                     |
+| Ikram Saidi       | Développement backend + tests unitaires                     |
 | Aya Issa          | Développement frontend + authentification |
 
 ---
