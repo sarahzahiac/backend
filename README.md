@@ -63,7 +63,7 @@ target/reports/apidocs/index.html
 ### 🐳 Docker
 - Contruire l'image Docker
 ```bash
-docker build -t maintenannce-env:base
+docker build -t maintenance-env:base
 ```
 - Lancer le conteneur
 ```bash
