@@ -82,8 +82,8 @@ Le projet utilise **SQLite** comme base de données embarquée.
 ## 💡 Bonnes pratiques d’usage
 
 - ✅ **Convention de noms** :
-    - Conteneur Docker : ``
-    - Image Docker : ``
+    - **Image Docker :** `backend-maintenance:v1`
+    - **Conteneur Docker :** `backend`
 - ✅ **Sécurité** :
     - Mots de passe hachés avec BCrypt avant sauvegarde
     - Authentification via tokens JWT
