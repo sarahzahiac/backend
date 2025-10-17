@@ -61,13 +61,17 @@ mvn javadoc:javadoc
 target/reports/apidocs/index.html
 ```
 ### 🐳 Docker
-- Contruire l'image Docker
+- Arrêter/Supprimer les conteneurs
 ```bash
-docker build -t maintenance-env:base
+docker compose down -v
 ```
-- Lancer le conteneur
+- Reconstruire les images Docker
 ```bash
-docker run -it maintenance-env:base bash
+docker compose build
+```
+- Lancer tous les services
+```bash
+docker compose up -d
 ```
 
 ### Liens
