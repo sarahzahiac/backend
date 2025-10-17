@@ -7,8 +7,8 @@
 | Maven | 3.9.x |
 | Spring Boot | 3.5.5 |
 | SQLite | 3.45.1.0 |
-| Docker | 25.x |
-| Jenkins | 2.x |
+| Docker | 28.4.0|
+| Jenkins | 2.528.1 |
 
 ---
 
@@ -96,6 +96,13 @@ Le projet utilise **SQLite** comme base de données embarquée.
     - Documentation générée dans `/target/site/apidocs`
 
 ---
+
+### ➡️ Container utilisé pour le déploiement :
+Container d'Ikram Saidi
+``` bash
+ip 10.10.2.134
+pass : 6250772
+```
 
 ## 🔗 Liens utiles
 - 📚 [Documentation JavaDoc](target/reports/apidocs/index.html)
