@@ -40,6 +40,13 @@ mvn spring-boot:run
 http://localhost:8585
 ```
 
+### ➡️ Container utilisé pour le déploiement :
+Container d'Ikram Saidi
+``` bash
+ip 10.10.2.134
+pass : 6250772
+```
+
 ## 🧾 Commandes utiles Maven
 | Action               | Commande            |
 |----------------------|---------------------|
