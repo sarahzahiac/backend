@@ -41,8 +41,9 @@ Voici les principaux dossiers du projet et leur rôle :
 ### 🐳 Docker
 | Action | Commande  |
 |--------|-----------|
-| Construire l’image Docker | `docker build -t maintenance-env:base` |
-| Lancer le conteneur | `docker run -it maintenance-env:base bash` |
+| Arrêter/Supprimer les conteneurs | `docker compose down -v` |
+| Reconstruire les images Docker | `docker compose build` |
+| Lancer tous les services | `docker compose up -d` |
 
 ---
 
