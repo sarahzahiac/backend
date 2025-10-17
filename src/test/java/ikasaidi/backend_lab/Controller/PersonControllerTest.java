@@ -31,7 +31,33 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-//Pour tester la méthode addHistory ou la logique n'est pas dans le service mais dans le controller
+/**
+ * Classe de test pour le contrôleur {@link PersonController}.
+ *
+ * Cette classe vérifie les fonctionnalités liées à l'ajout d'une série dans l'historique
+ * d'un utilisateur via les endpoints du contrôleur.
+ * <ul>
+ *   <li><b>POST /persons/{id}/history/{seriesId}</b> : ajoute une série dans l’historique d’un utilisateur.</li>
+ * </ul>
+ *
+ * <b>Technologies utilisées :</b>
+ * <ul>
+ *   <li>JUnit 5 pour les tests unitaires</li>
+ *   <li>Mockito pour simuler les dépendances (repositories)</li>
+ *   <li>Spring MockMvc pour simuler les requêtes HTTP</li>
+ * </ul>
+ *
+ * <b>Cas testés :</b>
+ * <ul>
+ *   <li>Ajout réussi d’une série dans l’historique</li>
+ *   <li>Erreur : utilisateur introuvable</li>
+ *   <li>Erreur : série introuvable</li>
+ * </ul>
+ *
+ * @author Ikram
+ * @version 1.0
+ */
+
 @ExtendWith(MockitoExtension.class)
 class PersonControllerTest {
 
@@ -43,6 +69,13 @@ class PersonControllerTest {
     @InjectMocks
     private PersonController personController;
 
+    /**
+     * Initialise les dépendances nécessaires avant chaque test.
+     *
+     * Comme Spring ne gère pas les injections ici (Mockito), on force l’injection
+     * manuellement avec {@link ReflectionTestUtils}.
+     *
+     */
     @BeforeEach
     void setup() {
 
@@ -55,6 +88,19 @@ class PersonControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(personController).build();
     }
 
+    /**
+     * Teste l’ajout d’une série dans l’historique d’un utilisateur.
+     *
+     * Simule une requête POST sur l’endpoint :
+     * <ul><li><b>/persons/{id}/history/{seriesId}</b></li></ul>
+     * Le test valide que :
+     * <ul>
+     *   <li>Le statut de la réponse est 200 OK.</li>
+     *   <li>Le corps de la réponse contient l’ID de la personne et de la série ajoutée.</li>
+     * </ul>
+     *
+     * @throws Exception si une erreur survient lors de l’exécution du test.
+     */
     @Test
     void addSerieToHistory() throws Exception {
 
@@ -68,7 +114,6 @@ class PersonControllerTest {
         when(personRepository.findById(1)).thenReturn(Optional.of(person));
         when(seriesRepository.findById(2L)).thenReturn(Optional.of(series));
         when(personRepository.save(person)).thenReturn(person);
-
 
         MockHttpServletResponse response = mvc.perform(
                         post("/persons/{id}/history/{seriesId}", 1, 2)
@@ -86,6 +131,13 @@ class PersonControllerTest {
 
 
     //On sait qu'il aura une erreur, donc on va l'expecter pour que le test pass
+    /**
+     * Vérifie le cas où l’utilisateur n’existe pas.
+     *
+     * Le contrôleur doit lancer une {@link RuntimeException} avec le message :
+     * <b>"Personne non trouvée"</b>.
+     *
+     */
     @Test
     void addSerieToHistoryPersonNotFound()  {
 
@@ -95,9 +147,15 @@ class PersonControllerTest {
                 personController.addSerieToHistory(123, 2L)
         );
         assertEquals("Personne non trouvée", ex.getMessage());
-
     }
 
+    /**
+     * Vérifie le cas où la série n’existe pas.
+     *
+     * Le contrôleur doit lancer une {@link RuntimeException} avec le message :
+     * <b>"Série non trouvée"</b>.
+     *
+     */
     @Test
     void addSerieToHistorySeriesNotFound()  {
 
@@ -110,8 +168,6 @@ class PersonControllerTest {
         RuntimeException ex = assertThrows(RuntimeException.class, () ->
                 personController.addSerieToHistory(1, 999L)
         );
-        assertEquals("Série non trouvée", ex.getMessage());;
-
-
+        assertEquals("Série non trouvée", ex.getMessage());
     }
-    }
+}

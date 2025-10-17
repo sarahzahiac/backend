@@ -16,6 +16,33 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Classe de test pour le service {@link SeriesService}.
+ *
+ * <b>Objectif :</b>
+ * Vérifier le bon fonctionnement des opérations du service liées à la gestion des séries :
+ * <ul>
+ *   <li><b>findAll()</b> → Retourne toutes les séries</li>
+ *   <li><b>findById(Long)</b> → Recherche une série par ID</li>
+ *   <li><b>newSerie(Series)</b> → Ajoute une nouvelle série</li>
+ *   <li><b>updateSerie(Long, Series)</b> → Met à jour une série existante</li>
+ *   <li><b>deleteSerie(Long)</b> → Supprime une série</li>
+ *   <li><b>searchSerie(String, Integer)</b> → Recherche des séries selon le genre et/ou le nombre d’épisodes</li>
+ * </ul>
+ *
+ * <b>Technologies utilisées :</b>
+ * <ul>
+ *   <li>JUnit 5 pour l’exécution des tests unitaires</li>
+ *   <li>Mockito pour simuler les dépendances du repository</li>
+ * </ul>
+ *
+ * <b>Résultats attendus :</b>
+ * Tous les tests doivent vérifier la logique métier sans interaction réelle avec la base de données.
+ *
+ * @author Ikram
+ * @version 1.0
+ */
+
 class SeriesServiceTest {
 
     @Mock
@@ -24,11 +51,17 @@ class SeriesServiceTest {
     @InjectMocks
     private SeriesService seriesService;
 
+    /**
+     * Initialise le contexte de test Mockito avant chaque méthode.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Vérifie que la méthode <b>findAll()</b> retourne la liste complète des séries.
+     */
     @Test
     void testFindAll() {
         Series s1 = new Series(1L, "Dark", "Sci-Fi", 10, 9.1);
@@ -42,6 +75,9 @@ class SeriesServiceTest {
         assertEquals("Dark", result.get(0).getTitle());
     }
 
+    /**
+     * Vérifie que <b>findById(Long)</b> retourne bien la série correspondante si elle existe.
+     */
     @Test
     void testFindByIdFound() {
         Series s1 = new Series(1L, "Dark", "Sci-Fi", 10, 9.1);
@@ -53,6 +89,9 @@ class SeriesServiceTest {
         assertEquals("Dark", result.getTitle());
     }
 
+    /**
+     * Vérifie que <b>findById(Long)</b> retourne null si la série n’existe pas.
+     */
     @Test
     void testFindByIdNotFound() {
 
@@ -64,6 +103,9 @@ class SeriesServiceTest {
         assertNull(result);
     }
 
+    /**
+     * Vérifie que <b>newSerie(Series)</b> crée et retourne la nouvelle série sauvegardée.
+     */
     @Test
     void testNewSerie() {
 
@@ -78,6 +120,9 @@ class SeriesServiceTest {
         assertEquals("Severance", result.getTitle());
     }
 
+    /**
+     * Vérifie que <b>updateSerie(Long, Series)</b> met bien à jour les informations d’une série existante.
+     */
     @Test
     void testUpdateSerieFound() {
         Series old = new Series(1L, "Old Title", "Sci-Fi", 5, 8.0);
@@ -93,6 +138,9 @@ class SeriesServiceTest {
         assertEquals(9.0, result.getNote());
     }
 
+    /**
+     * Vérifie que <b>updateSerie(Long, Series)</b> retourne null si la série n’existe pas.
+     */
     @Test
     void testUpdateSerie_notFound() {
         Series updated = new Series(null, "X", "Drama", 1, 5.0);
@@ -104,6 +152,9 @@ class SeriesServiceTest {
         assertNull(result);
     }
 
+    /**
+     * Vérifie que <b>deleteSerie(Long)</b> supprime la série si elle existe.
+     */
     @Test
     void testDeleteSerie() {
         when(seriesRepository.existsById(1L)).thenReturn(true);
@@ -114,6 +165,9 @@ class SeriesServiceTest {
         verify(seriesRepository, times(1)).deleteById(1L);
     }
 
+    /**
+     * Vérifie que <b>deleteSerie(Long)</b> ne fait rien si la série est introuvable.
+     */
     @Test
     void testDeleteSerie_notFound() {
         when(seriesRepository.existsById(99L)).thenReturn(false);
@@ -125,6 +179,9 @@ class SeriesServiceTest {
         verify(seriesRepository).existsById(99L);
     }
 
+    /**
+     * Vérifie que <b>searchSerie(String, Integer)</b> filtre correctement par genre et nombre d’épisodes.
+     */
     @Test
     void testSearch_byGenreAndEpisodes() {
         Series s1 = new Series(1L, "Dark", "Sci-Fi", 20, 9.1);
@@ -137,6 +194,9 @@ class SeriesServiceTest {
         assertEquals("Dark", result.get(0).getTitle());
     }
 
+    /**
+     * Vérifie que <b>searchSerie(String, Integer)</b> fonctionne correctement si seul le genre est spécifié.
+     */
     @Test
     void testSearch_byGenreOnly() {
         Series s1 = new Series(2L, "Breaking Bad", "Drama", 62, 9.5);
@@ -148,6 +208,9 @@ class SeriesServiceTest {
         assertEquals("Breaking Bad", result.get(0).getTitle());
     }
 
+    /**
+     * Vérifie que <b>searchSerie(String, Integer)</b> fonctionne si seul le nombre d’épisodes est fourni.
+     */
     @Test
     void testSearch_byEpisodesOnly() {
         Series s1 = new Series(3L, "Friends", "Comedy", 200, 8.9);
@@ -160,6 +223,9 @@ class SeriesServiceTest {
         assertEquals("Friends", result.get(0).getTitle());
     }
 
+    /**
+     * Vérifie que <b>searchSerie(String, Integer)</b> retourne toutes les séries si aucun paramètre n’est fourni.
+     */
     @Test
     void testSearch_noParams() {
         Series s1 = new Series(4L, "Severance", "Drama", 9, 8.6);
@@ -170,8 +236,4 @@ class SeriesServiceTest {
         assertEquals(1, result.size());
         assertEquals("Severance", result.get(0).getTitle());
     }
-
-
-
 }
-
